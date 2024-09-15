@@ -1,0 +1,10 @@
+<form [formGroup]="loginForm" class="max-w-lg m-auto p-16 border-2 border-sky-300 rounded-xl" (submit)="onLogin($event)">
+    <h1 class="text-4xl text-center mb-12">Login</h1>
+    <input formControlName="username" id="login_username" class="login_input rounded-xl" type="text" name="username" placeholder="Username"/>
+    <input formControlName="password" id="login_username" class="login_input rounded-xl" type="text" name="username" placeholder="Password"/>
+    <label><input type="checkbox"/> Remember Me?</label>
+    <button class="py-1 mt-8 bg-white w-full rounded-xl font-thin">Login</button>
+
+    <a href="/register">Register</a> <br/>
+    <a href="/forgot">Forgot Password</a>
+</form>
