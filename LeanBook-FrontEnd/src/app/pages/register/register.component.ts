@@ -25,6 +25,8 @@ export class RegisterComponent {
     onRegister(e: Event) {
         e.preventDefault();
 
+        var self = this;
+
         this.httpClient.post(GLOBAL_SEVER_DOMAIN_URL + '/register', {
             username: this.registerForm.value.username,
             email: this.registerForm.value.email,
@@ -32,16 +34,16 @@ export class RegisterComponent {
             lastname: this.registerForm.value.lastname,
             password: this.registerForm.value.password,
             confirmPassword: this.registerForm.value.confirmPassword
-        }).subscribe(
-            (response) => {
-                console.log('success', response);
+        }).subscribe({
+            next: (response) => {
+                console.log('next', response);  // Handle success response
             },
-            (response) => {
-                console.log('error', response);
+            error: (response) => {
+                console.log('error', response);  // Handle error response
             },
-            () => {
-                console.log('completed');
+            complete: () => {
+                console.log('complete');  // No argument is passed to complete
             }
-        );
+        });
     }
 }
