@@ -2,17 +2,16 @@ import express from 'express';
 
 import { getAccountByUsername, getAccountByUsernameAndPassword } from '../DAO/Account';
 import { generateDatabasePasswordFromSaltAndUserPassword } from '../Utilities/Random';
+import { VALIDATOR, VALIDATOR_FORMAT } from '../Utilities/Validator';
+import { generateGenericResponse, ResponseGeneric } from '../Requests/HTTP';
+import { BadRequestError, ErrorParams } from '../Errors/Error';
 
 export const login = async (request: express.Request, response: express.Response) => {
     try {
-        console.log(request.body);
         const { username, password } = request.body;
 
-        // put this in its own validator
-        if (!username || !password) {
-            console.log('username: ' + username, 'password: ' + password);
-            return response.status(400).send('Username or password is invalid');
-        }
+        VALIDATOR.validate(username, { label: 'Username', formName: 'username' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.USERNAME});
+        VALIDATOR.validate(password, { label: 'Password', formName: 'password' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.USERNAME});
 
         const accountFromUsername = await getAccountByUsername(username);
         if (accountFromUsername) {
@@ -25,10 +24,9 @@ export const login = async (request: express.Request, response: express.Response
             }
         }
 
-        return response.status(400).send('Incorrect username or password'); 
+        throw new BadRequestError({ message: 'Account with that username can not be found.', metadata: { formName: 'username' } } as ErrorParams);
     } catch (error: any) {
-        console.log(error);
-        return response.status(400).send('There was an unknown error loggin in.');
+        return response.status(400).json(generateGenericResponse(false, error)).end();
     }
 };
 

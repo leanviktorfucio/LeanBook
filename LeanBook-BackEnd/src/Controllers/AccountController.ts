@@ -8,7 +8,11 @@ export const register = async (request: express.Request, response: express.Respo
     try {
         const { username, email, firstname, lastname, password, confirmPassword } = request.body;
 
+        VALIDATOR.validate(username, { label: 'Username', formName: 'username' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.USERNAME});
+        VALIDATOR.validate(email, { label: 'Email', formName: 'email' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.EMAIL});
         VALIDATOR.validate(firstname, { label: 'First Name', formName: 'firstname' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.ALPHABETS_ONLY});
+        VALIDATOR.validate(lastname, { label: 'Last Name', formName: 'firstname' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.ALPHABETS_ONLY});
+        VALIDATOR.validate(password, { label: 'Password', formName: 'firstname' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.PASSWORD});
 
         // put this in its own validator
         if (!username || !email || !firstname || !lastname || !password || !confirmPassword) {
@@ -40,18 +44,7 @@ export const register = async (request: express.Request, response: express.Respo
 
         const salt = getSalt();
         const uuid = generateUUID();
-        console.log(salt, password);
         const processedPassword = generateDatabasePasswordFromSaltAndUserPassword(salt, password);
-
-        console.log(
-            'uuid: ' + uuid,
-            'username: ' + username, 
-            'email: ' + email, 
-            'firstname: ' + firstname, 
-            'lastname: ' + lastname, 
-            'processedPassword: ' + processedPassword,
-            'salt: ' + salt
-        );
 
         const newAccount = await registerAccount({
             uuid,

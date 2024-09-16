@@ -24,16 +24,16 @@ export class LoginComponent {
         this.httpClient.post(GLOBAL_SEVER_DOMAIN_URL + '/auth/login', {
             username: this.loginForm.value.username,
             password: this.loginForm.value.password
-        }).subscribe(
-            (response) => {
-                console.log('success', response);
+        }).subscribe({
+            next: (response) => {
+                console.log('next', response);  // Handle success response
             },
-            (response) => {
-                console.log('error', response);
+            error: (response) => {
+                console.log('error', response);  // Handle error response
             },
-            () => {
-                console.log('completed');
+            complete: () => {
+                console.log('complete');  // No argument is passed to complete
             }
-        );
+        });
     }
 }

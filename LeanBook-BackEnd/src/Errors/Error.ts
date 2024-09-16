@@ -11,6 +11,8 @@ export class CustomError extends Error {
   }
 }
 
+// used as the parameter when throwing these Errors.
+// not to be confused with ResponseGeneric which is for http response
 export interface ErrorParams {
   message: string,
   metadata?: {}
