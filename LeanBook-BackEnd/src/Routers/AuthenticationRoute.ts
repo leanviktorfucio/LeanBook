@@ -1,7 +1,7 @@
 import express from 'express';
 
-import { login } from '../Controllers/AuthenticationController';
+import { loginAction } from '../Controllers/AuthenticationController';
 
 export default (router: express.Router) => {
-    router.post('/auth/login', login);
+    router.post('/auth/login', loginAction);
 }

@@ -5,7 +5,8 @@
     padding-top: 64px;
 }
 
-.register_input {
+.update_information_input,
+.change_password_input {
     padding: 0.5rem;
     width: 100%;
     margin-bottom: 0.5rem;

@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import {getEnvValueByKey, getEnvironment} from '../Utilities/EnvironmentalVariables';
 
-export const getSalt = (): string => crypto.randomBytes(128).toString('base64');
+export const getSalt = (): string => crypto.randomBytes(16).toString('base64');
 
 export const generateDatabasePasswordFromSaltAndUserPassword = (salt: string, password: string): string => {
     const secretKey = getEnvValueByKey('AUTHENTICATION_SECRET_KEY')

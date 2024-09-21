@@ -16,6 +16,13 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Pre-action middleware
+// will be called first before going to actions
+app.use((request: express.Request, response: express.Response, next: () => {}) => {
+    next();
+});
+
 app.use('/', router());
 
 const server = http.createServer(app);

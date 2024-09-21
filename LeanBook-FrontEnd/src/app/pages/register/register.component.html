@@ -1,11 +1,11 @@
 <form [formGroup]="registerForm" class="max-w-lg m-auto p-16 border-2 border-sky-300 rounded-xl" (submit)="onRegister($event)">
     <h1 class="text-4xl text-center mb-12">Register</h1>
-    <input formControlName="username" class="login_input rounded-xl" type="text" placeholder="Username"/>
-    <input formControlName="email" class="login_input rounded-xl" type="text" placeholder="Email"/>
-    <input formControlName="firstname" class="login_input rounded-xl" type="text" placeholder="First Name"/>
-    <input formControlName="lastname" class="login_input rounded-xl" type="text" placeholder="Last Name"/>
-    <input formControlName="password" class="login_input rounded-xl" type="text" placeholder="Password"/>
-    <input formControlName="confirmPassword" class="login_input rounded-xl" type="text" placeholder="Confirm Password"/>
+    <input formControlName="username" class="register_input rounded-xl" type="text" placeholder="Username"/>
+    <input formControlName="email" class="register_input rounded-xl" type="text" placeholder="Email"/>
+    <input formControlName="firstname" class="register_input rounded-xl" type="text" placeholder="First Name"/>
+    <input formControlName="lastname" class="register_input rounded-xl" type="text" placeholder="Last Name"/>
+    <input formControlName="password" class="register_input rounded-xl" type="text" placeholder="Password"/>
+    <input formControlName="confirmPassword" class="register_input rounded-xl" type="text" placeholder="Confirm Password"/>
     <button class="py-1 mt-8 bg-white w-full rounded-xl font-thin">Register</button>
 
     <a href="/login">Login</a> <br/>
