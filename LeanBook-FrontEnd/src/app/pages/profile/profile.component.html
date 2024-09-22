@@ -1,10 +1,10 @@
 <div class="max-w-lg m-auto p-16 border-2 border-sky-300 rounded-xl">
-    <form [formGroup]="profileForm" class="" (submit)="onInformationUpdate($event)">
+    <form [formGroup]="profileForm" class="" (submit)="onProfileUpdate($event)">
         <h1 class="text-4xl text-center mb-12">Profile</h1>
-        <input formControlName="username" class="update_information_input rounded-xl" type="text" placeholder="Username"/>
-        <input formControlName="email" class="update_information_input rounded-xl" type="text" placeholder="Email"/>
-        <input formControlName="firstname" class="update_information_input rounded-xl" type="text" placeholder="First Name"/>
-        <input formControlName="lastname" class="update_information_input rounded-xl" type="text" placeholder="Last Name"/>
+        <input formControlName="username" class="update_profile_input rounded-xl" type="text" placeholder="Username"/>
+        <input formControlName="email" class="update_profile_input rounded-xl" type="text" placeholder="Email"/>
+        <input formControlName="firstname" class="update_profile_input rounded-xl" type="text" placeholder="First Name"/>
+        <input formControlName="lastname" class="update_profile_input rounded-xl" type="text" placeholder="Last Name"/>
         <button class="py-1 mt-8 bg-white w-full rounded-xl font-thin">Update</button>
     </form>
     <hr class="my-8">

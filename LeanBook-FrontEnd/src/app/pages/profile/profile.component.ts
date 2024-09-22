@@ -19,17 +19,13 @@ export class ProfileComponent {
     })
 
     constructor(private httpClient: HttpClient) {
-        var self = this;
-
         // get data from server (no need to do middle man authorization as much as possible)
         // wait for jwt is implemented so we don't need to put url param
         this.httpClient.get(GLOBAL_SEVER_DOMAIN_URL + '/profile/asdf').subscribe({
             next: (response: any) => {
-                debugger;
                 this.onLoad(response);
             },
             error: (response) => {
-                debugger;
                 console.log('error', response);  // Handle error response
             },
             complete: () => {
@@ -50,8 +46,25 @@ export class ProfileComponent {
         });
     }
 
-    onInformationUpdate = (e: Event): void => {
-
+    onProfileUpdate = (e: Event): void => {
+        this.httpClient.patch(GLOBAL_SEVER_DOMAIN_URL + '/profile/', {
+            username: this.profileForm.value.username,
+            email: this.profileForm.value.email,
+            firstname: this.profileForm.value.firstname,
+            lastname: this.profileForm.value.lastname
+        }).subscribe({
+            next: (response: any) => {
+                debugger;
+                this.onLoad(response);
+            },
+            error: (response) => {
+                debugger;
+                console.log('error', response);  // Handle error response
+            },
+            complete: () => {
+                console.log('complete');  // No argument is passed to complete
+            }
+        });
     }
 
     updatePasswordForm = new FormGroup({

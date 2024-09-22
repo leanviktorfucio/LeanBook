@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { AccountDBSchema, AccountRegisterType } from '../Schema/AccountSchema';
+import { AccountDBSchema, AccountRegisterType, AccountUpdateType } from '../Schema/AccountSchema';
 
 const AccountSchema = new mongoose.Schema(AccountDBSchema);
 
@@ -22,12 +22,12 @@ class AccountDAOModule {
         return AccountsDB.findOne({ username, authentication: { password }});
     }
     
-    registerAccount(accountModel: AccountRegisterType) {
-        return new AccountsDB(accountModel).save();
+    registerAccount(account: AccountRegisterType) {
+        return new AccountsDB(account).save();
     }
     
-    updateAccount(AccountUpdateSchema: any) {
-        return AccountsDB.findByIdAndUpdate(AccountUpdateSchema.id, AccountUpdateSchema);
+    updateAccount(accountId: string, AccountUpdateSchema: AccountUpdateType) {
+        return AccountsDB.findByIdAndUpdate(accountId, AccountUpdateSchema);
     }
 }
 

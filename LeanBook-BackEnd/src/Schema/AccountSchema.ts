@@ -1,5 +1,5 @@
 export const AccountDBSchema = {
-    uuid: { type: String, required: true },
+    _id: { type: String, required: true },
     username: { type: String, required: true },
     email: { type: String, required: true },
     firstname: { type: String, required: true },
@@ -15,7 +15,7 @@ export const AccountDBSchema = {
 };
 
 export interface AccountRegisterType {
-    uuid: string,
+    _id: string,
     username: string,
     email: string,
     firstname: string,
@@ -24,4 +24,11 @@ export interface AccountRegisterType {
         password: string,
         salt: string
     }
+}
+
+export interface AccountUpdateType {
+    username: string,
+    email: string,
+    firstname: string,
+    lastname: string
 }

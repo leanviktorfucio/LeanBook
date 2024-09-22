@@ -32,11 +32,11 @@ export const registerAction = async (request: express.Request, response: express
         }
 
         const salt = getSalt();
-        const uuid = generateUUID();
+        const _id = generateUUID();
         const processedPassword = generateDatabasePasswordFromSaltAndUserPassword(salt, password);
 
         const newAccountConfig: AccountRegisterType = {
-            uuid,
+            _id,
             username,
             email,
             firstname,
@@ -72,7 +72,8 @@ export const profileAction = async (request: express.Request, response: express.
 
 export const updateProfileAction = async (request: express.Request, response: express.Response, next: () => {}) => {
     try {
-        // update an account
+        // use service
+        // AccountDAO.updateAccount();
 
         return response.status(200).json().end();
     } catch (error: any) {

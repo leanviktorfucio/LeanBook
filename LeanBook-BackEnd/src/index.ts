@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors({
     origin: 'http://localhost:4200', // Replace with your Angular app URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // Specify allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
     optionsSuccessStatus: 200
