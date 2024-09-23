@@ -1,10 +1,12 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
 
 import { AccountService } from '../Services/AccountService';
 import { AccountDAO } from '../DAO/AccountDAO';
 import { getSalt, generateUUID, generateDatabasePasswordFromSaltAndUserPassword } from '../Utilities/Random';
 import { VALIDATOR, VALIDATOR_FORMAT } from '../Utilities/Validator';
-import { AccountRegisterType } from '../Schema/AccountSchema';
+import { AccountRegisterType, AccountUpdateType } from '../Schema/AccountSchema';
+import { generateGenericResponse } from '../Requests/HTTP';
 
 export const registerAction = async (request: express.Request, response: express.Response) => {
     try {
@@ -16,7 +18,7 @@ export const registerAction = async (request: express.Request, response: express
         VALIDATOR.validate(lastname, { label: 'Last Name', formName: 'firstname' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.ALPHABETS_ONLY});
         // VALIDATOR.validate(password, { label: 'Password', formName: 'firstname' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.PASSWORD});
 
-        const accountFromUsername = await AccountService.getAccountByUsername(username, false);
+        const accountFromUsername = await AccountService.getAccountByUsername(username);
         if (accountFromUsername) {
             return response.status(400).send('username exists');
         }
@@ -55,27 +57,31 @@ export const registerAction = async (request: express.Request, response: express
     }
 };
 
-export const profileAction = async (request: express.Request, response: express.Response, next: () => {}) => {
+export const getProfileAction = async (request: express.Request, response: express.Response, next: () => {}) => {
     try {
         let username = request.params?.username;
         if (!username) {
-            // get account from jwt
+            username = response.locals.account.username;
         }
         const accountFromUsername = await AccountService.getAccountByUsername(username);
 
         return response.status(200).json(accountFromUsername).end();
     } catch (error: any) {
-        console.log(error);
         return response.sendStatus(400);
     }
 }
 
 export const updateProfileAction = async (request: express.Request, response: express.Response, next: () => {}) => {
     try {
-        // use service
-        // AccountDAO.updateAccount();
+        const accountToUpdate = response.locals.account; 
+        const { username, email, firstname, lastname } = request.body;
+        const accountConfig: AccountUpdateType = { username, email, firstname, lastname };
 
-        return response.status(200).json().end();
+        AccountService.updateAccount(accountToUpdate._id, accountConfig);
+
+        const accountFromUsername = await AccountService.getAccountByUsername(username);
+
+        return response.status(200).json(accountFromUsername).end();
     } catch (error: any) {
         console.log(error);
         return response.sendStatus(400);

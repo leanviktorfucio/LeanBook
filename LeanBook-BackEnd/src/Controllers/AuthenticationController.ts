@@ -1,32 +1,38 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
 
 import { AccountService } from '../Services/AccountService';
 import { generateDatabasePasswordFromSaltAndUserPassword } from '../Utilities/Random';
-import { VALIDATOR, VALIDATOR_FORMAT } from '../Utilities/Validator';
 import { generateGenericResponse, ResponseGeneric } from '../Requests/HTTP';
 import { BadRequestError, ErrorParams } from '../Errors/Error';
+import { getEnvValueByKey } from '../Utilities/EnvironmentalVariables';
+import { TIME } from '../Config/Constants';
+import { AccountUpdateType } from '../Schema/AccountSchema';
 
 export const loginAction = async (request: express.Request, response: express.Response) => {
+    const { username, password } = request.body;
+
     try {
-        const { username, password } = request.body;
+        const accountFromUsername = await AccountService.getAccountByUsernameWithAuthentication(username);
+        
+        const processedPassword = generateDatabasePasswordFromSaltAndUserPassword(accountFromUsername.authentication.salt, password);
+    
+        const accountNewConfigWithNewLoggedInTime: AccountUpdateType = { 'lastlogindatetime': new Date(Date.now()) }; // @todo create Date class
+        AccountService.updateAccount(accountFromUsername._id, accountNewConfigWithNewLoggedInTime);
 
-        VALIDATOR.validate(username, { label: 'Username', formName: 'username' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.USERNAME});
-        VALIDATOR.validate(password, { label: 'Password', formName: 'password' }, { notEmpty: true, minLength: 1, format: VALIDATOR_FORMAT.USERNAME});
+        const account = await AccountService.getAccountByUsernameAndPassword(accountFromUsername.username, processedPassword);
 
-        const accountFromUsername = await AccountService.getAccountByUsername(username);
-        if (accountFromUsername) {
-            const processedPassword = generateDatabasePasswordFromSaltAndUserPassword(accountFromUsername.authentication.salt, password);
+        const jwtToken = jwt.sign({account}, getEnvValueByKey('JWT_SECRET_KEY'), { expiresIn: TIME.ONE_DAY_IN_SECONDS});
 
-            const foundAccount = await AccountService.getAccountByUsernameAndPassword(accountFromUsername.username, processedPassword);
-
-            if (foundAccount) {
-                return response.status(200).send('Successful');
-            }
-        }
-
-        throw new BadRequestError({ message: 'Account with that username can not be found.', metadata: { formName: 'username' } } as ErrorParams);
+        response.cookie('token', jwtToken, {
+            httpOnly: true,
+            // secure: true, @todo learn these
+            // maxAge: 100000,
+            // signed: true
+        });
+    
+        return response.status(200).send(generateGenericResponse(true));
     } catch (error: any) {
         return response.status(400).json(generateGenericResponse(false, error)).end();
     }
 };
-

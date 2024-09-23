@@ -1,3 +1,7 @@
+import express from 'express';
+import jwt from "jsonwebtoken";
+import { getEnvValueByKey } from "../Utilities/EnvironmentalVariables";
+
 /**
  * STATUS CODES
  */
@@ -17,10 +21,21 @@ export interface ResponseGeneric {
     metadata?: {}
 }
 
-export const generateGenericResponse = (isSuccess: boolean, error: any): ResponseGeneric => {
+export const generateGenericResponse = (isSuccess: boolean, error?: any): ResponseGeneric => {
     return {
         isSuccess: isSuccess,
-        message: error.message,
-        metadata: error.metadata
+        message: error?.message,
+        metadata: error?.metadata
     } as ResponseGeneric;
+}
+
+export const getAccountFromRequest = (request: express.Request): any => {
+    let account = null;
+    const token = request.cookies.token
+    if (token) {
+        const tokenValue: any = jwt.verify(token, getEnvValueByKey('JWT_SECRET_KEY'));
+        account = tokenValue?.account
+    }
+    
+    return account;
 }

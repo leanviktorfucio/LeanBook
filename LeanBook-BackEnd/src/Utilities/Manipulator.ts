@@ -5,6 +5,7 @@ export const ObjectManipulator = {
     removeProperties<T extends object>(obj: T, keys: Array<keyof T>): Partial<T> {
         const newObject = { ...obj };
         keys.forEach(key => {
+            console.log(key, typeof key === 'object');
             delete newObject[key];
         });
     
