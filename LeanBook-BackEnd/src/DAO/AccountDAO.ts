@@ -3,7 +3,7 @@ import { AccountDBSchema, AccountRegisterType, AccountUpdateType } from '../Sche
 
 const AccountSchema = new mongoose.Schema(AccountDBSchema);
 
-export const AccountsDB = mongoose.model('accounts', AccountSchema);
+const AccountsDB = mongoose.model('accounts', AccountSchema);
 
 class AccountDAOModule {
     getAccountById(id: number) {
@@ -15,19 +15,27 @@ class AccountDAOModule {
     }
     
     async getAccountByUsername(username: string) {
+        return await AccountsDB.findOne({ username })
+            .select('-authentication.password')
+            .select('-authentication.salt');
+    }
+    
+    async getAccountByUsernameWithAuthentication(username: string) {
         return await AccountsDB.findOne({ username });
     }
     
-    getAccountByUsernameAndPassword(username: string, password: string) {
-        return AccountsDB.findOne({ username, authentication: { password }});
+    async getAccountByUsernameAndPassword(username: string, password: string) {
+        return AccountsDB.findOne({ username, 'authentication.password': password })
+            .select('-authentication.password')
+            .select('-authentication.salt');
     }
     
     registerAccount(account: AccountRegisterType) {
         return new AccountsDB(account).save();
     }
     
-    updateAccount(accountId: string, AccountUpdateSchema: AccountUpdateType) {
-        return AccountsDB.findByIdAndUpdate(accountId, AccountUpdateSchema);
+    updateAccount(accountId: string, accountNewConfig: AccountUpdateType) {
+        return AccountsDB.findByIdAndUpdate(accountId, accountNewConfig);
     }
 }
 

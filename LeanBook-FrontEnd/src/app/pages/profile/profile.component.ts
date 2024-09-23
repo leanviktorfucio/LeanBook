@@ -21,7 +21,7 @@ export class ProfileComponent {
     constructor(private httpClient: HttpClient) {
         // get data from server (no need to do middle man authorization as much as possible)
         // wait for jwt is implemented so we don't need to put url param
-        this.httpClient.get(GLOBAL_SEVER_DOMAIN_URL + '/profile/asdf').subscribe({
+        this.httpClient.get(GLOBAL_SEVER_DOMAIN_URL + '/profile/', { withCredentials: true }).subscribe({
             next: (response: any) => {
                 this.onLoad(response);
             },
@@ -52,7 +52,7 @@ export class ProfileComponent {
             email: this.profileForm.value.email,
             firstname: this.profileForm.value.firstname,
             lastname: this.profileForm.value.lastname
-        }).subscribe({
+        }, { withCredentials: true }).subscribe({
             next: (response: any) => {
                 debugger;
                 this.onLoad(response);

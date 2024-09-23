@@ -3,6 +3,7 @@ import cors from 'cors';
 import http from 'http';
 import mongoose from 'mongoose';
 import router from './Routers';
+import cookieParser from 'cookie-parser';
 import {getEnvValueByKey, getEnvironment} from './Utilities/EnvironmentalVariables';
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Pre-action middleware
 // will be called first before going to actions

@@ -24,7 +24,7 @@ export class LoginComponent {
         this.httpClient.post(GLOBAL_SEVER_DOMAIN_URL + '/auth/login', {
             username: this.loginForm.value.username,
             password: this.loginForm.value.password
-        }).subscribe({
+        }, { withCredentials:true }).subscribe({
             next: (response) => {
                 console.log('next', response);  // Handle success response
             },
