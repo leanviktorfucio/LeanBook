@@ -8,6 +8,7 @@ import { BadRequestError, ErrorParams } from '../Errors/Error';
 import { getEnvValueByKey } from '../Utilities/EnvironmentalVariables';
 import { TIME } from '../Config/Constants';
 import { AccountUpdateType } from '../Schema/AccountSchema';
+import { DateTime } from '../Utilities/DateTime';
 
 export const loginAction = async (request: express.Request, response: express.Response) => {
     const { username, password } = request.body;
@@ -17,7 +18,7 @@ export const loginAction = async (request: express.Request, response: express.Re
         
         const processedPassword = generateDatabasePasswordFromSaltAndUserPassword(accountFromUsername.authentication.salt, password);
     
-        const accountNewConfigWithNewLoggedInTime: AccountUpdateType = { 'lastlogindatetime': new Date(Date.now()) }; // @todo create Date class
+        const accountNewConfigWithNewLoggedInTime: AccountUpdateType = { 'lastlogindatetime': DateTime.getNowAsDate() };
         AccountService.updateAccount(accountFromUsername._id, accountNewConfigWithNewLoggedInTime);
 
         const account = await AccountService.getAccountByUsernameAndPassword(accountFromUsername.username, processedPassword);
