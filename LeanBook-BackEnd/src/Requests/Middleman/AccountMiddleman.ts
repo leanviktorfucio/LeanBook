@@ -1,12 +1,21 @@
 import express from 'express';
 import { VALIDATOR, VALIDATOR_FORMAT } from '../../Utilities/Validator';
-import { getAccountFromRequest, STATUS_CODES } from '../HTTP';
+import { generateGenericResponse, getAccountFromRequest, STATUS_CODES } from '../HTTP';
+import { ErrorParams } from '../../Errors/Error';
 
 export const getProfileMiddleman = (request: express.Request, response: express.Response, next: () => {}) => {
+    next();
+}
+
+export const getCurrentProfileMiddleman = (request: express.Request, response: express.Response, next: () => {}) => {
     const loggedInAccount = getAccountFromRequest(request);
+    if (!loggedInAccount) {
+        response.status(STATUS_CODES.UNAUTHORIZED).json(generateGenericResponse(false, { 'message': 'Unauthorized' } as ErrorParams)).end();
+        return;
+    }
 
     // I really don't like attaching data to response object just to pass it to the Route Handlers 
-    response.locals.account = loggedInAccount;
+    request.params.username = loggedInAccount.username;
 
     next();
 }
@@ -14,7 +23,7 @@ export const getProfileMiddleman = (request: express.Request, response: express.
 export const updateProfileMiddleman = (request: express.Request, response: express.Response, next: () => {}) => {
     const loggedInAccount = getAccountFromRequest(request);
     if (!loggedInAccount) {
-        response.sendStatus(STATUS_CODES.UNAUTHORIZED).end();
+        response.status(STATUS_CODES.UNAUTHORIZED).json(generateGenericResponse(false, { 'message': 'Unauthorized' } as ErrorParams)).end();
         return;
     }
 

@@ -12,7 +12,7 @@ class AccountServiceModule {
                 metadata: {
                     username
                 }
-              } as ErrorParams);
+            } as ErrorParams);
         }
 
         return account;

@@ -5,6 +5,7 @@ import { AccountDAO } from '../DAO/AccountDAO';
 import { getSalt, generateUUID, generateDatabasePasswordFromSaltAndUserPassword } from '../Utilities/Random';
 import { VALIDATOR, VALIDATOR_FORMAT } from '../Utilities/Validator';
 import { AccountRegisterType, AccountUpdateType } from '../Schema/AccountSchema';
+import { generateGenericResponse } from '../Requests/HTTP';
 
 export const registerAction = async (request: express.Request, response: express.Response) => {
     try {
@@ -58,14 +59,12 @@ export const registerAction = async (request: express.Request, response: express
 export const getProfileAction = async (request: express.Request, response: express.Response, next: () => {}) => {
     try {
         let username = request.params?.username;
-        if (!username) {
-            username = response.locals.account.username;
-        }
+
         const accountFromUsername = await AccountService.getAccountByUsername(username);
 
         return response.status(200).json(accountFromUsername).end();
     } catch (error: any) {
-        return response.sendStatus(error.statusCode);
+        return response.status(error.statusCode).json(generateGenericResponse(false, error)).end();
     }
 }
 

@@ -33,7 +33,12 @@ export const getAccountFromRequest = (request: express.Request): any => {
     let account = null;
     const token = request.cookies.token
     if (token) {
-        const tokenValue: any = jwt.verify(token, getEnvValueByKey('JWT_SECRET_KEY'));
+        let tokenValue: any = null;
+
+        try {
+            tokenValue = jwt.verify(token, getEnvValueByKey('JWT_SECRET_KEY'));
+        } catch (error: any) {} // do nothing. we don't want to throw error when .verify throws an error. we just treat it as not logged in
+
         account = tokenValue?.account
     }
     
