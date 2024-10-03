@@ -32,8 +32,18 @@ export const loginAction = async (request: express.Request, response: express.Re
             // signed: true
         });
     
-        return response.status(200).send(generateGenericResponse(true));
+        return response.status(200).send(generateGenericResponse(true)).end();
     } catch (error: any) {
         return response.status(400).json(generateGenericResponse(false, error)).end();
     }
+};
+
+export const logoutAction = async (request: express.Request, response: express.Response) => {
+    console.log('logout');
+
+    delete response.locals.account;
+
+    response.clearCookie('token');
+
+    return response.status(200).send(generateGenericResponse(true));
 };
