@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import cors from 'cors';
 import http from 'http';
 import mongoose from 'mongoose';
@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 // Pre-action middleware
 // will be called first before going to actions
-app.use((request: express.Request, response: express.Response, next: () => {}) => {
+app.use((request: express.Request, response: express.Response, next: NextFunction ) => {
     next();
 });
 

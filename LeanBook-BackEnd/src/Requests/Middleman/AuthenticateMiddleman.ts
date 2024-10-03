@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import { VALIDATOR, VALIDATOR_FORMAT } from '../../Utilities/Validator';
 import { generateGenericResponse } from '../HTTP';
 
 // a middleware used to authenticate action before going inside that function
-export const loginMiddleman = (request: express.Request, response: express.Response, next: () => {}): void => {
+export const loginMiddleman = (request: express.Request, response: express.Response, next: NextFunction): void => {
     try {
         const { username, password } = request.body;
 

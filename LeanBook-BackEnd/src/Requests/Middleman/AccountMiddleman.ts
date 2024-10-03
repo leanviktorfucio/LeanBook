@@ -1,13 +1,13 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import { VALIDATOR, VALIDATOR_FORMAT } from '../../Utilities/Validator';
 import { generateGenericResponse, getAccountFromRequest, STATUS_CODES } from '../HTTP';
 import { ErrorParams } from '../../Errors/Error';
 
-export const getProfileMiddleman = (request: express.Request, response: express.Response, next: () => {}) => {
+export const getProfileMiddleman = (request: express.Request, response: express.Response, next: NextFunction) => {
     next();
 }
 
-export const getCurrentProfileMiddleman = (request: express.Request, response: express.Response, next: () => {}) => {
+export const getCurrentProfileMiddleman = (request: express.Request, response: express.Response, next: NextFunction) => {
     const loggedInAccount = getAccountFromRequest(request);
     if (!loggedInAccount) {
         response.status(STATUS_CODES.UNAUTHORIZED).json(generateGenericResponse(false, { 'message': 'Unauthorized' } as ErrorParams)).end();
@@ -20,7 +20,7 @@ export const getCurrentProfileMiddleman = (request: express.Request, response: e
     next();
 }
 
-export const updateProfileMiddleman = (request: express.Request, response: express.Response, next: () => {}) => {
+export const updateProfileMiddleman = (request: express.Request, response: express.Response, next: NextFunction) => {
     const loggedInAccount = getAccountFromRequest(request);
     if (!loggedInAccount) {
         response.status(STATUS_CODES.UNAUTHORIZED).json(generateGenericResponse(false, { 'message': 'Unauthorized' } as ErrorParams)).end();
