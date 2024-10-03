@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 
 import { AccountService } from '../Services/AccountService';
 import { AccountDAO } from '../DAO/AccountDAO';
@@ -56,7 +56,7 @@ export const registerAction = async (request: express.Request, response: express
     }
 };
 
-export const getProfileAction = async (request: express.Request, response: express.Response, next: () => {}) => {
+export const getProfileAction = async (request: express.Request, response: express.Response, next: NextFunction) => {
     try {
         let username = request.params?.username;
 
@@ -68,7 +68,7 @@ export const getProfileAction = async (request: express.Request, response: expre
     }
 }
 
-export const updateProfileAction = async (request: express.Request, response: express.Response, next: () => {}) => {
+export const updateProfileAction = async (request: express.Request, response: express.Response, next: NextFunction) => {
     try {
         const accountToUpdate = response.locals.account; 
         const { username, email, firstname, lastname } = request.body;
